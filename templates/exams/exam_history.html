@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="history-container">
+
+    <h2 class="page-title">📊 My Exam History</h2>
+
+    {% if not results %}
+        <!-- Empty State -->
+        <div class="empty-card">
+            <div class="empty-icon">📝</div>
+            <h3>No Exams Attempted</h3>
+            <p>You haven’t attempted any exams yet.</p>
+            <a href="{% url 'exam-list' %}" class="btn-primary">
+                Browse Exams
+            </a>
+        </div>
+
+    {% else %}
+        <div class="history-grid">
+            {% for r in results %}
+                <div class="history-card">
+                    <h3 class="exam-title">{{ r.exam.title }}</h3>
+
+                    <p class="exam-meta">
+                        Attempted on:<br>
+                        <strong>{{ r.submitted_at|date:"d M Y, h:i A" }}</strong>
+                    </p>
+
+                    <div class="score-row">
+                        <div>
+                            <span class="label">Score</span>
+                            <span class="value">{{ r.score }}/{{ r.total_questions }}</span>
+                        </div>
+                        <div>
+                            <span class="label">Percentage</span>
+                            <span class="value">{{ r.percentage }}%</span>
+                        </div>
+                    </div>
+
+                    <span class="status
+                        {% if r.passed %}
+                            status-pass
+                        {% else %}
+                            status-fail
+                        {% endif %}
+                    ">
+                        {% if r.passed %} PASSED {% else %} FAILED {% endif %}
+                    </span>
+
+                    <div class="card-actions">
+                        <a href="{% url 'view_result' r.id %}" class="btn-outline">
+                            View Result
+                        </a>
+
+                        {% if r.passed %}
+                            <a href="{% url 'certificates:download' r.id %}" class="btn-success">
+                                Certificate
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+
+<style>
+/* ===== Page Layout ===== */
+.history-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.page-title {
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* ===== Empty State ===== */
+.empty-card {
+    text-align: center;
+    padding: 50px;
+    background: #f9fafb;
+    border-radius: 14px;
+}
+
+.empty-icon {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
+
+/* ===== Grid ===== */
+.history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* ===== Card ===== */
+.history-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.history-card:hover {
+    transform: translateY(-5px);
+}
+
+/* ===== Exam Info ===== */
+.exam-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.exam-meta {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+/* ===== Score ===== */
+.score-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.label {
+    display: block;
+    font-size: 12px;
+    color: #777;
+}
+
+.value {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ===== Status ===== */
+.status {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-pass {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-fail {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ===== Actions ===== */
+.card-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-outline {
+    border: 2px solid #007bff;
+    color: #007bff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+}
+</style>
+
+{% endblock %}

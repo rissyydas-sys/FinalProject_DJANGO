@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Add Exam</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <input type="text" name="title" placeholder="Exam Title" required><br><br>
+    <textarea name="description" placeholder="Exam Description" required></textarea>
+
+    <hr>
+    <h3>Questions</h3>
+
+    <div id="questions">
+        <div class="question-box">
+            <input name="question[]" placeholder="Question" required><br>
+            <input name="option1[]" placeholder="Option 1" required><br>
+            <input name="option2[]" placeholder="Option 2" required><br>
+            <input name="option3[]" placeholder="Option 3" required><br>
+            <input name="option4[]" placeholder="Option 4" required><br>
+
+            <select name="correct[]" required>
+                <option value="1">Correct: Option 1</option>
+                <option value="2">Correct: Option 2</option>
+                <option value="3">Correct: Option 3</option>
+                <option value="4">Correct: Option 4</option>
+            </select>
+        </div>
+    </div>
+
+    <br>
+    <button type="button" onclick="addQuestion()">Add Another Question</button>
+    <br><br>
+
+    <button type="submit">Create Exam</button>
+</form>
+
+<script>
+function addQuestion() {
+    const div = document.querySelector(".question-box").cloneNode(true);
+    document.getElementById("questions").appendChild(div);
+}
+</script>
+
+{% endblock %}

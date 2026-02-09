@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Welcome, {{ user.username }}</h2>
+
+    {% if not user.is_active %}
+        <div class="alert alert-warning">
+            Your account is pending admin approval. You cannot enroll or attend exams until approved.
+        </div>
+    {% else %}
+        <div class="row g-4 mt-3">
+            <div class="col-md-4">
+                <a href="/api/courses/" class="btn btn-primary w-100 py-3">View Courses</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/enrollments/" class="btn btn-success w-100 py-3">Enroll in Courses</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/exams/" class="btn btn-warning w-100 py-3">Attend Exams & Quizzes</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/results/" class="btn btn-info w-100 py-3">View Results</a>
+            </div>
+            <div class="col-md-4">
+                <a href="/certificates/" class="btn btn-secondary w-100 py-3">Generate Certificate</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

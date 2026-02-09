@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-card">
+    <h3 class="form-title">
+        <i class="bi bi-box-arrow-in-right"></i> Login
+    </h3>
+
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            Invalid username or password
+        </div>
+    {% endif %}
+
+    {% if error %}
+<div class="alert alert-warning text-center">
+    {{ error }}
+</div>
+{% endif %}
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" placeholder="Enter username" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Enter password" required>
+        </div>
+
+        <button class="btn btn-primary w-100">
+            Login
+        </button>
+    </form>
+
+    <p class="text-center mt-3">
+        Don’t have an account?
+        <a href="/register/">Register</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exam Result</title>
+</head>
+<body style="font-family: Arial; text-align:center;">
+
+    <h2>{{ exam.title }} - Result</h2>
+
+    <h3>Your Score: {{ score }} / {{ total }}</h3>
+
+    <a href="/">Go Home</a>
+
+</body>
+</html>
+{% endblock %}

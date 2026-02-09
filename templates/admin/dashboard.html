@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card shadow text-center p-3">
+            <h4>Users Pending</h4>
+            <h2>{{ pending_users }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow text-center p-3">
+            <h4>Total Courses</h4>
+            <h2>{{ course_count }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow text-center p-3">
+            <h4>Total Exams</h4>
+            <h2>{{ exam_count }}</h2>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

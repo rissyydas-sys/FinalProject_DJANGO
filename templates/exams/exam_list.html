@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .exam-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+    }
+
+    .exam-card {
+        background: #ffffff;
+        border-radius: 18px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .exam-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 14px 35px rgba(0,0,0,0.15);
+    }
+
+    .exam-header {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        padding: 18px;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .exam-body {
+        padding: 18px;
+    }
+
+    .exam-desc {
+        font-size: 0.9rem;
+        color: #555;
+        min-height: 60px;
+    }
+
+    .exam-footer {
+        padding: 16px;
+        text-align: center;
+        background: #f9fafb;
+    }
+
+    .exam-btn {
+        background: #dc2626;
+        border: none;
+        color: #fff;
+        border-radius: 30px;
+        padding: 8px 28px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        transition: background 0.3s ease;
+    }
+
+    .exam-btn:hover {
+        background: #b91c1c;
+        color: #fff;
+    }
+
+    .badge-box {
+        margin-top: 10px;
+    }
+
+    .badge-duration {
+        background: #2563eb;
+        color: #fff;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+    }
+
+    .page-title {
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <h2 class="page-title">📝 Available Exams</h2>
+
+    {% if exams %}
+        <div class="exam-grid">
+
+            {% for exam in exams %}
+                <div class="exam-card">
+
+                    <div class="exam-header">
+                        {{ exam.title }}
+                    </div>
+
+                    <div class="exam-body">
+                        <p class="exam-desc">
+                            {{ exam.description|default:"No description available" }}
+                        </p>
+
+                        {% if exam.duration_minutes %}
+                            <div class="badge-box">
+                                <span class="badge-duration">
+                                    ⏱ {{ exam.duration_minutes }} Minutes
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                   <div class="exam-footer">
+    {% if request.user.is_active %}
+        <a href="{% url 'attend-exam' exam.id %}"
+           class="exam-btn">
+            ▶ Attend Exam
+        </a>
+    {% else %}
+        <span class="badge bg-warning text-dark">
+            ⏳ Waiting for Admin Approval
+        </span>
+    {% endif %}
+</div>
+
+
+                </div>
+            {% endfor %}
+
+        </div>
+    {% else %}
+        <p class="text-center text-muted">
+            No exams available.
+        </p>
+    {% endif %}
+
+</div>
+
+{% endblock %}

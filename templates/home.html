@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero text-center">
+    <h1>Learning Management System</h1>
+    <p class="lead mt-3">
+        Learn. Test. Get Certified.
+    </p>
+
+    {% if not user.is_authenticated %}
+        <a href="/register/" class="btn btn-light btn-lg mt-4 me-2">Get Started</a>
+        <a href="/login/" class="btn btn-outline-light btn-lg mt-4">Login</a>
+    {% endif %}
+</div>
+
+<div class="row mt-5 text-center">
+    <div class="col-md-4">
+        <h4>📚 Courses</h4>
+        <p>Access structured learning materials</p>
+    </div>
+    <div class="col-md-4">
+        <h4>📝 Exams</h4>
+        <p>Attend quizzes and exams online</p>
+    </div>
+    <div class="col-md-4">
+        <h4>🎓 Certificate</h4>
+        <p>Download course completion certificates</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-container">
+
+    <h2 class="page-title">🎓 My Certificates & Exam History</h2>
+
+    {% if not results %}
+        <!-- EMPTY STATE -->
+        <div class="empty-card">
+            <div class="empty-icon">📄</div>
+            <h3>No Exams Yet</h3>
+            <p>You haven’t attempted any exams yet.</p>
+            <a href="{% url 'exam-list' %}" class="btn-primary">
+                Browse Exams
+            </a>
+        </div>
+
+    {% else %}
+        {% if not passed_results %}
+            <div class="info-banner">
+                You haven’t passed any exams yet.  
+                Certificates will appear here once you pass an exam 💪
+            </div>
+        {% endif %}
+
+        <div class="card-grid">
+            {% for r in results %}
+                <div class="exam-card">
+                    <h3 class="exam-title">{{ r.exam.title }}</h3>
+
+                    <p class="exam-meta">
+                        Score: <strong>{{ r.score }}/{{ r.total_questions }}</strong><br>
+                        Percentage: <strong>{{ r.percentage }}%</strong>
+                    </p>
+
+                    <span class="status
+                        {% if r.passed %}
+                            status-pass
+                        {% else %}
+                            status-fail
+                        {% endif %}
+                    ">
+                        {% if r.passed %} PASSED {% else %} FAILED {% endif %}
+                    </span>
+
+                    <div class="card-actions">
+                        <a href="{% url 'view_result' r.id %}" class="btn-outline">
+                            View Result
+                        </a>
+
+                        {% if r.passed %}
+                            <a href="{% url 'certificates:download' r.id %}" class="btn-success">
+                                Download Certificate
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<style>
+/* ===== Layout ===== */
+.dashboard-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.page-title {
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+/* ===== Empty State ===== */
+.empty-card {
+    text-align: center;
+    padding: 50px;
+    background: #f9fafb;
+    border-radius: 12px;
+}
+
+.empty-icon {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
+
+/* ===== Info Banner ===== */
+.info-banner {
+    background: #fff3cd;
+    color: #856404;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* ===== Card Grid ===== */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* ===== Exam Card ===== */
+.exam-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.exam-card:hover {
+    transform: translateY(-5px);
+}
+
+.exam-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.exam-meta {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+/* ===== Status Badge ===== */
+.status {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.status-pass {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-fail {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ===== Buttons ===== */
+.card-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-outline {
+    border: 1px solid #007bff;
+    color: #007bff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .exam-container {
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .exam-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white;
+        padding: 18px 22px;
+        border-radius: 14px;
+        margin-bottom: 25px;
+    }
+
+    .exam-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    .timer-box {
+        background: #ffffff;
+        color: #4f46e5;
+        padding: 8px 18px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .mcq-card {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 18px 22px;
+        margin-bottom: 18px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .mcq-card p {
+        font-size: 1rem;
+        margin-bottom: 14px;
+    }
+
+    .option-label {
+        display: block;
+        padding: 10px 14px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+
+    .option-label:hover {
+        background: #eef2ff;
+        border-color: #6366f1;
+    }
+
+    .option-label input {
+        margin-right: 8px;
+    }
+
+    .submit-btn {
+        background: #4f46e5;
+        border: none;
+        color: white;
+        padding: 12px 40px;
+        border-radius: 30px;
+        font-size: 1rem;
+        font-weight: 600;
+        display: block;
+        margin: 30px auto;
+        transition: background 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        background: #4338ca;
+    }
+</style>
+
+<div class="exam-container">
+
+    <!-- Header -->
+    <div class="exam-header">
+        <div class="exam-title">
+            📝 {{ exam.title }}
+        </div>
+        <div class="timer-box">
+            ⏱ <span id="timer"></span>
+        </div>
+    </div>
+
+    <!-- Exam Form -->
+    <form method="post" id="examForm">
+        {% csrf_token %}
+
+        {% for q in questions %}
+            <div class="mcq-card">
+                <p>
+                    <b>{{ forloop.counter }}. {{ q.question_text }}</b>
+                </p>
+
+                <label class="option-label">
+                    <input type="radio" name="q{{ q.id }}" value="1">
+                    {{ q.option1 }}
+                </label>
+
+                <label class="option-label">
+                    <input type="radio" name="q{{ q.id }}" value="2">
+                    {{ q.option2 }}
+                </label>
+
+                <label class="option-label">
+                    <input type="radio" name="q{{ q.id }}" value="3">
+                    {{ q.option3 }}
+                </label>
+
+                <label class="option-label">
+                    <input type="radio" name="q{{ q.id }}" value="4">
+                    {{ q.option4 }}
+                </label>
+            </div>
+        {% endfor %}
+
+        <button type="submit" class="submit-btn">
+            ✅ Submit Exam
+        </button>
+    </form>
+
+</div>
+
+<!-- Timer Script -->
+<script>
+let time = {{ exam.duration_minutes }} * 60;
+const timer = document.getElementById("timer");
+
+const interval = setInterval(() => {
+    let min = Math.floor(time / 60);
+    let sec = time % 60;
+    timer.innerHTML = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+    time--;
+
+    if (time < 0) {
+        clearInterval(interval);
+        document.getElementById("examForm").submit();
+    }
+}, 1000);
+</script>
+
+{% endblock %}
